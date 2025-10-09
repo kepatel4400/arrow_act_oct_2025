@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>NanoOWL Tree Demo</title>
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 16px; }
+      .row { margin-bottom: 12px; }
+      #camera_image { max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 6px; }
+      input[type="text"] { width: 600px; max-width: 100%; padding: 8px; }
+      .hint { color: #666; font-size: 0.9em; }
+      button { padding: 8px 12px; }
+    </style>
+  </head>
+  <body>
+    <h2>NanoOWL tree demo</h2>
+
+    <div class="row">
+      <input id="file_input" type="file" accept="image/*">
+      <span class="hint">choose an image to analyze in the browser UI</span>
+    </div>
+
+    <div class="row">
+      <input id="prompt_input" type="text" placeholder="[a face [an eye, a nose]], a hand">
+      <button id="send_btn">send prompt</button>
+      <div class="hint">type a tree prompt. examples: <code>[an owl, a glove]</code> or <code>[a person [a face, a hand]]</code></div>
+    </div>
+
+    <div class="row">
+      <img id="camera_image" src="" alt="image stream will appear here">
+    </div>
+
+    <script>
+      const img = document.getElementById("camera_image");
+      const promptInput = document.getElementById("prompt_input");
+      const sendBtn = document.getElementById("send_btn");
+      const fileInput = document.getElementById("file_input");
+
+      // websocket to receive JPEG frames and send prompt updates
+      const wsProto = (location.protocol === "https:") ? "wss" : "ws";
+      const ws = new WebSocket(wsProto + "://" + window.location.host + "/ws");
+
+      let lastURL = null;
+      ws.binaryType = "arraybuffer";
+
+      ws.onmessage = function (evt) {
+        if (!(evt.data instanceof ArrayBuffer)) return;
+        const blob = new Blob([evt.data], { type: "image/jpeg" });
+        if (lastURL) URL.revokeObjectURL(lastURL);
+        lastURL = URL.createObjectURL(blob);
+        img.src = lastURL;
+      };
+
+      function sendPrompt() {
+        const p = promptInput.value.trim();
+        if (!p || ws.readyState !== WebSocket.OPEN) return;
+        ws.send("prompt:" + p);
+      }
+
+      sendBtn.onclick = sendPrompt;
+      // live updates while typing, throttled
+      let t = null;
+      promptInput.oninput = () => {
+        clearTimeout(t);
+        t = setTimeout(sendPrompt, 200);
+      };
+
+      // upload selected image to /upload
+      fileInput.onchange = async function (e) {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        const fd = new FormData();
+        fd.append("file", f, f.name);
+        try {
+          const res = await fetch("/upload", { method: "POST", body: fd });
+          if (!res.ok) console.error("upload failed");
+        } catch (err) {
+          console.error("upload error", err);
+        }
+      };
+    </script>
+  </body>
+</html>
