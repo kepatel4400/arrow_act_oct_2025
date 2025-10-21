@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# Consistent, bannered printing + Ollama token/time stats
-
 import argparse
 import time
 import os
