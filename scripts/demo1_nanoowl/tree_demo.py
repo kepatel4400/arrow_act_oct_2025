@@ -159,7 +159,7 @@ def build_app(args):
                     tree=pd["tree"],
                     clip_text_encodings=pd["clip_encodings"],
                     owl_text_encodings=pd["owl_encodings"],
-                    threshold=0.3,
+                    threshold=0.1,
                 )
                 t1 = time.perf_counter_ns()
                 _ = (t1 - t0) / 1e9  # dt seconds, reserved for logging if needed
