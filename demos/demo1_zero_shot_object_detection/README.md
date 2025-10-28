@@ -14,8 +14,7 @@ NanoOWL is a project that optimizes OWL-ViT to run real-time on NVIDIA Jetson Or
 
 </details>
 
-### Step 1: Download Container
-NOTE: Make sure to have [jetson-container](../utils.md) available
+### Step 1: Launch NanoOWL Container
 
 ```bash
 jetson-containers run dustynv/nanoowl:r36.4.0
