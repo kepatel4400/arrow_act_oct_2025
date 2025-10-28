@@ -2,6 +2,9 @@
 
 NanoOWL is a project that optimizes OWL-ViT to run real-time on NVIDIA Jetson Orin Platforms with NVIDIA TensorRT. NanoOWL also introduces a new "tree detection" pipeline that combines OWL-ViT and CLIP to enable nested detection and classification of anything, at any level, simply by providing text.
 
+<p align="center">
+<img src="./media/jetson_person_2x.gif" height="50%" width="50%"/></p>
+
 <details>
 <summary>Resources</summary>
 
@@ -65,7 +68,8 @@ apt update && apt install sxiv featherpad -y
         ```python
         sxiv owl.jpg
         ```
-        
+    <details>
+    <summary>More examples</summary>
     
     ```bash
     python3 owl_predict.py \
@@ -118,10 +122,12 @@ apt update && apt install sxiv featherpad -y
         --image ../assets/class.jpg \
         --output class.jpg
     ```
+    </details>
 </details>
 
 <details>
 <summary>Interactive detection</summary>                
+
 
 - Change directory
 
