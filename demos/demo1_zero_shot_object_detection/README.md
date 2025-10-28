@@ -36,7 +36,7 @@ apt update && apt install sxiv featherpad -y
 ### Step 3: Run prediction
 
 <details>
-<summary>Single image detection</summary>
+<summary><strong>Single image detection</strong></summary>
 
 - Change directory
     ```bash
@@ -126,7 +126,7 @@ apt update && apt install sxiv featherpad -y
 </details>
 
 <details>
-<summary>Interactive detection</summary>                
+<summary><strong>Interactive detection</strong></summary>
 
 
 - Change directory
@@ -136,7 +136,7 @@ apt update && apt install sxiv featherpad -y
     ```
 
     <details>            
-    <summary>Option 1: Live camera feed</summary>
+    <summary><strong>Option 1: Live camera feed</strong></summary>
 
     - Ensure camera device available
             
@@ -196,7 +196,7 @@ apt update && apt install sxiv featherpad -y
 
     </details>
     <details>
-    <summary>Option 2: Static images upload</summary>
+    <summary><strong>Option 2: Static images upload</strong></summary>
 
     - Replace the `tree_demo.py` script with the updated version available [HERE](./tree_demo.py)
         - To edit the file, run
