@@ -2,7 +2,10 @@
 
 This repository contains demos and resources for running Generative AI (GenAI) models on NVIDIA Jetson Orin Nano, showcasing the capabilities of edge AI with optimized performance.
 
-## Demos
+## Available Demos
+
+> **NOTE:** Go though the [System Setup](./demos/system_setup.md) first to ensure your Jetson Orin Nano is properly configured with the necessary software and dependencies.
+
 
 - Zero-shot object detection - [Demo 1](./demos/demo1_zero_shot_object_detection/README.md)
 - Visual Question Answering (VQA) - [Demo 2](./demos/demo2_visual_question_answering/README.md)

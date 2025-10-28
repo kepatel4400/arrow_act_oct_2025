@@ -271,16 +271,3 @@
     ```
 
 </details>
-
-<details>
-<summary><strong>Download sample media</strong></summary>
-
-```python
-cd ~/Downloads
-```
-
-```bash
-git clone https://github.com/kepatel4400/arrow_act_oct_2025
-```
-
-</details>
