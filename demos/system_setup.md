@@ -1,6 +1,88 @@
 # System Setup
 
 <details>
+<summary><strong>Jetson Setup</strong></summary>
+
+1. Install JTOP (highly recommended)
+
+    ```bash
+    sudo apt install python3-pip
+    sudo pip3 install -U jetson-stats
+    ```
+
+2. Restart Jetson
+    
+    ```bash
+    sudo reboot
+    ```
+    
+3. Run the command below to verify all the system configuration
+    
+    ```bash
+    jtop
+    ```
+    <details>
+    <summary>
+        <strong>
+        If <code>jtop</code> not running,
+        </strong>
+    </summary>
+    
+   The main issue was that the jtop service file was missing from `/etc/systemd/system`, copying it manually fixed the issue.
+        
+   - Follow this:
+    
+    1. Uninstall and reinstall jetson-stats
+        
+        ```
+        sudo pip3 uninstall jetson-stats -y
+        sudo pip3 install jetson-stats
+        ```
+        
+    2. Manually install the jtop service (this was the key fix)
+        
+        ```bash
+        sudo cp /usr/local/jetson_stats/jtop.service /etc/systemd/system/
+        ```
+        
+    3. Reload systemd and enable/start the service
+        
+        ```bash
+        sudo systemctl daemon-reload
+        sudo systemctl enable jtop.service
+        sudo systemctl start jtop.service
+        ```
+        
+    4. Add user to jtop group for proper permissions
+        
+        ```
+        sudo usermod -a -G jtop $USER
+        ```
+        
+    5. Verify service is running
+        
+        ```
+        sudo systemctl status jtop.service
+        ```
+        
+    6. Logout or restart
+    7. Test `jtop` 
+        
+        ```
+        jtop
+        ```
+    </details>
+            
+4. (optional) Install Terminator
+    
+    ```python
+    sudo apt install terminator
+    ```
+
+</details>
+
+
+<details>
 <summary><strong>Checkpoints 🏁</strong></summary>
 
 - Run `jtop` and verify the jetson software stack
@@ -196,7 +278,7 @@
 </details>
 
 <details>
-<summary><strong>Download `jetson-containers`</strong></summary>
+<summary><strong>Download <code>jetson-containers</code></strong></summary>
 
 - Clone jetson-containers repo
     
