@@ -2,6 +2,10 @@
 
 This repository contains demos and resources for running Generative AI (GenAI) models on NVIDIA Jetson Orin Nano, showcasing the capabilities of edge AI with optimized performance.
 
+<p align="center">
+  <img width="300" height="300" alt="image" src="https://github.com/user-attachments/assets/65d7a532-397c-4315-a77f-96049c7306b3" />
+</p>
+
 ## Available Demos
 
 > **NOTE:** Go though the [System Setup](./demos/system_setup.md) first to ensure your Jetson Orin Nano is properly configured with the necessary software and dependencies.
