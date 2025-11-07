@@ -71,6 +71,10 @@ NanoDB is a CUDA-optimized multimodal vector database that uses embeddings from 
     - Start the server
 
         ```bash
+        cd /
+        ```
+        
+        ```bash
         python3 -m nanodb \
             --path /data/nanodb/coco/2017 \
             --server --port=7860
