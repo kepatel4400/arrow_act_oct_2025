@@ -1,4 +1,4 @@
-# Demo 3: Realtime Multimodal Similarity Search with Vector Database - NanoDB
+# Demo 3: Multimodal Similarity Search with Vector Database - NanoDB
 
 NanoDB is a CUDA-optimized multimodal vector database that uses embeddings from the CLIP vision transformer for txt2img and img2img similarity search. It's running in realtime on 275K images from the MS COCO image captioning dataset, and shows a fundamental capability in multimodal applications - operating in a shared embedding space between text/images/etc., and being able to query with a deep contextual understanding.
 
