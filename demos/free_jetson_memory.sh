@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # NOTE: make it executable $chmod +x free_jetson_memory.sh
+# Run with sudo
 
 set -euo pipefail
 
