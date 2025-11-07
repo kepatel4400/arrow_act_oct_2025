@@ -10,6 +10,7 @@ import threading
 
 import numpy as np
 import gradio as gr
+import torch
 
 
 from fastapi.staticfiles import StaticFiles
@@ -75,12 +76,14 @@ class Server(threading.Thread):
                 with gr.Column():
                     text_query = gr.Textbox(placeholder="Search Query", show_label=False)#.style(container=False)
                     stats = gr.Textbox(
-                        value=self.create_stats(type), 
+                        value=self.create_stats(), 
                         lines=5, 
                         show_label=False, 
                         interactive=False, 
                         elem_id='stats_box'
                     )
+                        
+                image_upload = gr.Image(type='pil')
             
             self.gallery_images = self.get_random_images(self.gallery_size)
             
@@ -88,8 +91,9 @@ class Server(threading.Thread):
                 value=self.gallery_images
             ).style(columns=8, height='750px', object_fit='scale_down', preview=False)
 
-            gallery.select(self.on_gallery_select, None, [gallery, stats, text_query], show_progress=False)
-            text_query.change(self.on_query, text_query, [gallery, stats], show_progress=False)
+            gallery.select(self.on_gallery_select, None, [gallery, stats, image_upload, text_query], show_progress=False)
+            text_query.change(self.on_query, text_query, [gallery, stats, image_upload], show_progress=False)
+            image_upload.upload(self.on_query, image_upload, [gallery, stats, text_query], show_progress=False)
             
         self.app = gr.mount_gradio_app(self.app, blocks, path='/')
 
@@ -113,6 +117,8 @@ class Server(threading.Thread):
         #if request:
         #    self.server_url = request.headers['origin']  # origin/referrer include http/https, 'host' does not
         #    print(f"-- server URL:  {self.server_url}")
+        if query is None or (isinstance(query, str) and len(query.strip()) == 0):
+            return self.gallery_images, gr.Textbox.update(), None
         if isinstance(query, str):
             if os.path.splitext(query)[1].lower() in self.db.img_extensions:
                 logging.debug(f"image query from path {query}")
@@ -125,15 +131,23 @@ class Server(threading.Thread):
             query_type='image'
         else:
             raise ValueError(f"unexpected query type {type(query)}")
+        
+        # Get embedding and ensure CUDA operations complete before search
+        embedding = self.db.embed(query, type=query_type)
+        
+        # Force CUDA synchronization to ensure embedding is fully computed
+        # To avoid race condition
+        if isinstance(embedding, torch.Tensor) and embedding.is_cuda:
+            torch.cuda.synchronize()
             
-        indexes, distances = self.db.search(query, k=self.gallery_size)
+        indexes, distances = self.db.index.search(embedding, k=self.gallery_size)
         images = []
         
         for n in range(self.gallery_size):
             images.append((self.db.metadata[indexes[n]]['path'], f"{distances[n]*100:.1f}%"))
 
         self.gallery_images = images
-        return images, gr.HTML.update(value=self.create_stats(query_type))
+        return images, gr.Textbox.update(value=self.create_stats(query_type)), None
        
     def on_gallery_select(self, evt: gr.SelectData):
         logging.debug(f"web client selected {evt.value} at {evt.index} from {evt.target}  selected={evt.selected}")
@@ -144,7 +158,7 @@ class Server(threading.Thread):
         else:
             img = "/data/images/lake.jpg"
           
-        images, stats = self.on_query(img)
-        return images, stats, None
+        images, stats, _ = self.on_query(img)
+        return images, stats, img, None
         
         
