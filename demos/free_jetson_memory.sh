@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# jetson-demo-scrub.sh
-# Prep Jetson for the next demo while staying on desktop.
+# NOTE: make it executable $chmod +x free_jetson_memory.sh
 
 set -euo pipefail
 
@@ -236,7 +235,7 @@ main() {
   ensure_config
   parse_args "$@"
 
-  bold "Jetson demo scrub starting"
+  bold "Cleanup starting"
   largest_processes
   show_mem
   local before_avail=$(mem_available_kB)
@@ -275,15 +274,15 @@ main() {
   local reclaimed_kB=$(( after_avail - before_avail ))
   bold "[reclaimed] $((reclaimed_kB/1024)) MB approx"
   
-  # Show helpful info if Ollama was kept stopped
+  # If Ollama was kept stopped
   if (( OLLAMA_WAS_STOPPED )); then
     echo
-    warn "ℹ Ollama is stopped. To restart:"
+    warn "Ollama is stopped. To restart:"
     echo "    sudo systemctl start ollama"
   fi
   
   echo
-  bold "✓ Done."
+  bold "Done."
 }
 
 main "$@"
