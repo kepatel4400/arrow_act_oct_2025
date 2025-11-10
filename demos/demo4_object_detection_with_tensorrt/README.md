@@ -46,7 +46,7 @@ sudo docker run -it --rm \
 ## Step 2: Install utility packages
     
 ```bash
-apt update && apt install sxiv featherpad -y
+apt update && apt install sxiv -y
 ```
 
 ## Step 3: Run YOLOv11 Object Detection
