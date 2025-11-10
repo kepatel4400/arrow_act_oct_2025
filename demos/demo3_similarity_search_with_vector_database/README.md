@@ -49,17 +49,14 @@ NanoDB is a CUDA-optimized multimodal vector database that uses embeddings from 
 - The below command will download (if not already present) and launch the NanoDB container
 
     ```bash
-    jetson-containers run dustynv/nanodb:r36.4.0
+    jetson-containers run \
+        -v $HOME/Downloads/arrow_act_oct_2025/demos/demo3_similarity_search_with_vector_database:/mnt/host_files:ro \
+        dustynv/nanodb:r36.4.0
     ```
+    **Note:** Make sure to update the path to the demo directory in the `-v` flag. The `-v` flag mounts the demo directory as read-only (`ro`) inside the container at `/mnt/host_files`.
 
 ## Step 4: Setup NanoDB Web Server
 
-- Inside the container terminal, install utility packages
-    
-    ```bash
-    apt update && apt install featherpad -y
-    ```
-    
 - Run NanoDB web server
     
     - Change directory
@@ -69,9 +66,9 @@ NanoDB is a CUDA-optimized multimodal vector database that uses embeddings from 
         ```
 
     - Replace the `server.py` script with the updated version available [HERE](./server.py)
-        - To edit the file, run
-            ```python
-            featherpad server.py
+        - Copy it from the mounted directory:
+            ```bash
+            cp /mnt/host_files/server.py server.py
             ```
     
     - Start the server
