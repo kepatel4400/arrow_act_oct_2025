@@ -17,8 +17,12 @@ NanoOWL is a project that optimizes OWL-ViT to run real-time on NVIDIA Jetson Or
 ### Step 1: Launch NanoOWL Container
 
 ```bash
-jetson-containers run dustynv/nanoowl:r36.4.0
+jetson-containers run \
+    -v $HOME/Downloads/arrow_act_oct_2025/demos/demo1_zero_shot_object_detection:/mnt/host_files:ro \
+    dustynv/nanoowl:r36.4.0
 ```
+
+**Note:** Make sure to update the path to the demo directory in the `-v` flag. The `-v` flag mounts the demo directory as read-only (`ro`) inside the container at `/mnt/host_files`.
 
 ### Step 2: Install Dependencies
 Inside the container, run the following commands
@@ -26,10 +30,10 @@ Inside the container, run the following commands
 pip install aiohttp --index-url https://pypi.org/simple
 ```
 
-- Install utility packages
+- Install utility packages (for image viewing)
 
 ```bash
-apt update && apt install sxiv featherpad -y
+apt update && apt install sxiv -y
 ```
 
 ### Step 3: Run prediction
@@ -43,9 +47,9 @@ apt update && apt install sxiv featherpad -y
     ```
 
 - Replace the `owl_predict.py` script with the updated version available [HERE](./owl_predict.py)
-    - To edit the file, run
-        ```python
-        featherpad owl_predict.py
+    - Copy it from the mounted directory:
+        ```bash
+        cp /mnt/host_files/owl_predict.py owl_predict.py
         ```
                 
 - Run this
@@ -198,14 +202,14 @@ apt update && apt install sxiv featherpad -y
     <summary><strong>Option 2: Static images upload</strong></summary>
 
     - Replace the `tree_demo.py` script with the updated version available [HERE](./tree_demo.py)
-        - To edit the file, run
-            ```python
-            featherpad tree_demo.py
+        - Copy it from the mounted directory:
+            ```bash
+            cp /mnt/host_files/tree_demo.py tree_demo.py
             ```
     - Replace the `index.html` file with the updated version available [HERE](./index.html)
-        - To edit the file, run
-            ```python
-            featherpad index.html
+        - Copy it from the mounted directory:
+            ```bash
+            cp /mnt/host_files/index.html index.html
             ```
                 
     - Run this
